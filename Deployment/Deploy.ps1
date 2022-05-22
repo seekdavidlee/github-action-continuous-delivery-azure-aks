@@ -1,6 +1,4 @@
 param(
-    [Parameter(Mandatory = $true)][string]$AKS_NAME,
-    [Parameter(Mandatory = $true)][string]$AKS_RESOURCE_GROUP,
     [Parameter(Mandatory = $true)][string]$BUILD_ENV,
     [Parameter(Mandatory = $true)][string]$STACK_NAME_TAG_PREFIX)
 
