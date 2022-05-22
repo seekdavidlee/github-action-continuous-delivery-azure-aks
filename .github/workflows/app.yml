@@ -63,4 +63,4 @@ jobs:
       - id: appsdeploy
         name: Deploy apps
         run: |
-          .\Deployment\Deploy.ps1 -BUILD_ENV ${{ env.buildEnv } -STACK_NAME_TAG_PREFIX ${{ env.STACK_NAME_TAG_PREFIX }}
+          .\Deployment\Deploy.ps1 -BUILD_ENV ${{ env.buildEnv }} -STACK_NAME_TAG_PREFIX ${{ env.STACK_NAME_TAG_PREFIX }}
