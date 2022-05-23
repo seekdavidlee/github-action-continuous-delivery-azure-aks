@@ -24,4 +24,6 @@ spec:
               service:
                 name: prometheus-server
                 port:
-                  number: 9090            
+                  number: 9090
+            path: /(.*)                  
+            pathType: Prefix                          
