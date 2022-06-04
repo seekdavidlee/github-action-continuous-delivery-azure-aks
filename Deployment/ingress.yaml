@@ -16,12 +16,15 @@ spec:
                   name: prometheus-server
                   port:
                       number: 9090
-            path: /prom/(.*)
+            path: /(.*)
             pathType: Prefix        
-          - backend:
+    - host: web.contoso.com
+      http:
+        paths:    
+            backend:
               service:
                 name: mywebapp
                 port:
                   number: 80
-            path: /app/(.*)
+            path: /(.*)
             pathType: Prefix
