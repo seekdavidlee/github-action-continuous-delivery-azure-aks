@@ -83,6 +83,8 @@ else {
 
 helm repo update
 
+helm install -generate-name stable/Prometheus --namespace $namespace
+
 helm install ingress-nginx ingress-nginx/ingress-nginx --namespace $namespace `
     --set controller.replicaCount=2 `
     --set controller.metrics.enabled=true `
@@ -91,18 +93,18 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --namespace $namespace `
 
 helm install keda kedacore/keda -n $namespace
 
-$content = Get-Content .\Deployment\prometheus\kustomization.yaml
-$content = $content.Replace('$NAMESPACE', $namespace)
-Set-Content -Path ".\Deployment\prometheus\kustomization.yaml" -Value $content
+# $content = Get-Content .\Deployment\prometheus\kustomization.yaml
+# $content = $content.Replace('$NAMESPACE', $namespace)
+# Set-Content -Path ".\Deployment\prometheus\kustomization.yaml" -Value $content
 
-$content = Get-Content .\Deployment\prometheus\prometheus.yaml
-$content = $content.Replace('$NAMESPACE', $namespace)
-Set-Content -Path ".\Deployment\prometheus\prometheus.yaml" -Value $content
+# $content = Get-Content .\Deployment\prometheus\prometheus.yaml
+# $content = $content.Replace('$NAMESPACE', $namespace)
+# Set-Content -Path ".\Deployment\prometheus\prometheus.yaml" -Value $content
 
-kubectl apply --kustomize Deployment/prometheus -n $namespace
-if ($LastExitCode -ne 0) {
-    throw "An error has occured. Unable to apply prometheus directory."
-}
+# kubectl apply --kustomize Deployment/prometheus -n $namespace
+# if ($LastExitCode -ne 0) {
+#     throw "An error has occured. Unable to apply prometheus directory."
+# }
 
 $content = Get-Content .\Deployment\mywebapp.yaml
 
