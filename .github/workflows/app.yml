@@ -28,8 +28,7 @@ jobs:
         run: |
           .\ResolveSharedResources.ps1 `
           -STACK_NAME_TAG_PREFIX ${{ secrets.STACK_NAME_TAG_PREFIX }} `
-          -BUILD_ENV ${{ env.buildEnv }} `
-          -PREFIX ${{ secrets.PREFIX }}
+          -BUILD_ENV ${{ env.buildEnv }}          
 
       - name: Build azure environment
         id: deploy

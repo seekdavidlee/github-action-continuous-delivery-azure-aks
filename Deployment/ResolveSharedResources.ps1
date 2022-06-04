@@ -1,6 +1,5 @@
 param(
-    [Parameter(Mandatory = $true)][string]$BUILD_ENV,
-    [Parameter(Mandatory = $true)][string]$PREFIX,
+    [Parameter(Mandatory = $true)][string]$BUILD_ENV,    
     [Parameter(Mandatory = $true)][string]$STACK_NAME_TAG_PREFIX)
 
 function GetResource([string]$stackName, [string]$stackEnvironment) {
@@ -41,7 +40,7 @@ Write-Host "::set-output name=subnetId::$subnetId"
 
 # This is the rg where the application should be deployed
 $groups = az group list --tag stack-environment=$BUILD_ENV | ConvertFrom-Json
-$appResourceGroup = ($groups | Where-Object { $_.tags.'stack-name' -eq "$PREFIX-api" }).name
+$appResourceGroup = ($groups | Where-Object { $_.tags.'stack-name' -eq "$STACK_NAME_TAG_PREFIX-api" }).name
 Write-Host "::set-output name=appResourceGroup::$appResourceGroup"
 
 # Also resolve managed identity to use
