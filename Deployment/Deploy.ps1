@@ -81,9 +81,9 @@ else {
     Write-Host "Skip adding kedacore repo with helm as it already exist."
 }
 
-$foundHelmStable = ($repoList | Where-Object { $_.name -eq "stable" }).Count -eq 1
-if (!$foundHelmStable) {
-    helm repo add stable https://charts.helm.sh/stable
+$foundHelmProm = ($repoList | Where-Object { $_.name -eq "prometheus-community" }).Count -eq 1
+if (!$foundHelmProm) {
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 }
 else {
     Write-Host "Skip adding stable repo with helm as it already exist."
@@ -91,7 +91,7 @@ else {
 
 helm repo update
 
-helm install --generate-name stable/Prometheus --namespace $namespace
+helm install prometheus prometheus-community/kube-prometheus-stack --namespace $namespace
 
 helm install ingress-nginx ingress-nginx/ingress-nginx --namespace $namespace `
     --set controller.replicaCount=2 `
