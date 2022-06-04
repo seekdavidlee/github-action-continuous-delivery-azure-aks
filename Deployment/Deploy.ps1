@@ -83,7 +83,7 @@ else {
 
 helm repo update
 
-helm install -generate-name stable/Prometheus --namespace $namespace
+helm install --generate-name stable/Prometheus --namespace $namespace
 
 helm install ingress-nginx ingress-nginx/ingress-nginx --namespace $namespace `
     --set controller.replicaCount=2 `
