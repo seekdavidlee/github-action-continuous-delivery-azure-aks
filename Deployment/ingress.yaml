@@ -21,7 +21,7 @@ spec:
     - host: web.contoso.com
       http:
         paths:    
-            backend:
+          - backend:
               service:
                 name: mywebapp
                 port:
