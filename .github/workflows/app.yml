@@ -39,7 +39,7 @@ jobs:
           template: ./deployment/deploy.bicep
           parameters: >            
             location=${{ steps.resolve-shared-resources.outputs.location }}
-            prefix=${{ secrets.PREFIX }}
+            prefix=${{ secrets.STACK_NAME_TAG_PREFIX }}
             appEnvironment=${{ env.buildEnv }}            
             subnetId=${{ steps.resolve-shared-resources.outputs.subnetId }}
             aksMSIId=${{ steps.resolve-shared-resources.outputs.managedIdentityId }}
