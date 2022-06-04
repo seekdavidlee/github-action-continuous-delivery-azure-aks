@@ -16,12 +16,12 @@ spec:
                   name: prometheus-server
                   port:
                       number: 9090
-            path: /(.*)
+            path: /prom/(.*)
             pathType: Prefix        
           - backend:
               service:
                 name: mywebapp
                 port:
                   number: 80
-            path: /(.*)
+            path: /app/(.*)
             pathType: Prefix
