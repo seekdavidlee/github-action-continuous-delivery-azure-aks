@@ -1,0 +1,65 @@
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+    branches-ignore:
+      - 'main'
+
+env:
+  buildEnv: 'dev'
+
+jobs:
+  cd_deploy:
+    environment: dev
+    name: Deploy Azure Environment
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Azure CLI Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - id: resolve-shared-resources
+        name: Resolve shared resources
+        working-directory: .\deployment
+        run: |
+          .\ResolveSharedResources.ps1 `
+          -STACK_NAME_TAG_PREFIX ${{ secrets.STACK_NAME_TAG_PREFIX }} `
+          -BUILD_ENV ${{ env.buildEnv }}          
+
+      - name: Build azure environment
+        id: deploy
+        uses: azure/arm-deploy@v1
+        with:
+          deploymentName: 'deploy-${{ github.run_number }}'
+          resourceGroupName: ${{ steps.resolve-shared-resources.outputs.appResourceGroup }}
+          template: ./deployment/deploy.bicep
+          parameters: >            
+            location=${{ steps.resolve-shared-resources.outputs.location }}
+            prefix=${{ secrets.STACK_NAME_TAG_PREFIX }}
+            appEnvironment=${{ env.buildEnv }}            
+            subnetId=${{ steps.resolve-shared-resources.outputs.subnetId }}
+            aksMSIId=${{ steps.resolve-shared-resources.outputs.managedIdentityId }}
+
+  deploy_apps:
+    name: Deploy apps
+    needs:    
+      - cd_deploy
+    runs-on: windows-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Azure CLI Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - id: appsdeploy
+        name: Deploy apps
+        run: |
+          .\Deployment\Deploy.ps1 -BUILD_ENV ${{ env.buildEnv }} -STACK_NAME_TAG_PREFIX ${{ secrets.STACK_NAME_TAG_PREFIX }}
